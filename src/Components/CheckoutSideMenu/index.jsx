@@ -6,6 +6,11 @@ import './styles.css'
 
 const CheckoutSideMenu = () => {
   const context = useContext(ShoppingCartContext)
+
+  const handleDelete= (id) => {
+    const filteredProducts = context.cartProducts.filter(product => product.id != id)
+    context.setCartProducts(filteredProducts)
+  }
   console.log('CART: ', context.cartProducts)
 
   return (
@@ -22,11 +27,13 @@ const CheckoutSideMenu = () => {
       <div className='px-6 overflow-y-scroll'>
       {
         context.cartProducts.map(product => (
-            <OrderCard 
+            <OrderCard
+                id={product.id} 
                 key={product.id}
                 title={product.title}
                 price={product.price}
                 imageUrl={product.imageUrl}
+                handleDelete={handleDelete}
             />
         ))
       }
