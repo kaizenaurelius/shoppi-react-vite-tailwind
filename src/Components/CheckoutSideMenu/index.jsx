@@ -4,6 +4,7 @@ import { ShoppingCartContext } from '../../Context'
 import OrderCard from '../OrderCard'
 import { totalPrice } from '../../utils'
 import './styles.css'
+import { Link } from 'react-router-dom'
 
 const CheckoutSideMenu = () => {
   const context = useContext(ShoppingCartContext)
@@ -59,11 +60,13 @@ const CheckoutSideMenu = () => {
             {totalPrice(context.cartProducts)}
           </span>
         </p>
+        <Link to='my-orders/last'>
         <button 
           className='bg-black py-3 text-white w-full rounded-lg'
           onClick={() => handleCheckout()}>
           Checkout
         </button>
+        </Link>
       </div>
     </aside>
   )
