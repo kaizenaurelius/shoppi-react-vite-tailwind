@@ -15,7 +15,7 @@ const CheckoutSideMenu = () => {
   }
   const handleCheckout = () => {
     const orderToAdd = {
-      date:'01.02.03',
+      date:new Date().toLocaleDateString(),
       products: context.cartProducts,
       totalProducts: context.cartProducts.lenght,
       totalPrice: totalPrice(context.cartProducts)
