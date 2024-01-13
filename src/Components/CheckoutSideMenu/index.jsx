@@ -24,7 +24,7 @@ const CheckoutSideMenu = () => {
     context.setCartProducts([])
 
   }
-  console.log('CART: ', context.cartProducts)
+  
 
   return (
     <aside
