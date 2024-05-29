@@ -3,7 +3,7 @@ import { createContext, useState, useEffect } from 'react'
 export const ShoppingCartContext = createContext()
 
 
-//key de Account i de SignOut
+//key de Account y de SignOut
 
 export const initializeLocalStorage = () => {
 
@@ -73,7 +73,6 @@ export const ShoppingCartProvider = ({children}) => {
 
     // Get products by category
     const [searchByCategory, setSearchByCategory] = useState(null)
-    console.log(filteredItems)
 
 
 

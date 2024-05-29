@@ -1,6 +1,6 @@
 import Layout from "../../Components/Layout"
-import { Link } from 'react-router-dom'
-import {useContext, useState} from 'react'
+import { Link, useNavigate} from 'react-router-dom'
+import {useContext, useState, useRef} from 'react'
 import { ShoppingCartContext } from '../../Context'
 
 
@@ -8,6 +8,8 @@ import { ShoppingCartContext } from '../../Context'
 function SignIn() {
     const context = useContext(ShoppingCartContext)
     const [view, setView] = useState('user-info')
+    const form =  useRef(null)
+    const navigate =  useNavigate();
 
     //Obteniendo Account del LocalStorage
     const account = localStorage.getItem('account')
@@ -17,6 +19,32 @@ function SignIn() {
     const noAccountInLocalStorage = parsedAccount ? Object.keys(parsedAccount).length === 0 : true
     const noAccountInLocalState = context.account ? Object.keys(context.account).length === 0 : true
     const hasUserAnAccount = !noAccountInLocalStorage || !noAccountInLocalState
+
+    const handleSignIn = () => {
+      const stringifiedSignOut = JSON.stringify(false)
+      localStorage.setItem('sign-out', stringifiedSignOut)
+      context.setSignOut(false)
+
+      //return <Navigate replace to={'/'} />
+       navigate('/', { replace: true });
+    }
+
+    const createAnAccount = () => {
+      const formData = new FormData(form.current)
+      const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        password: formData.get('password')
+
+      }
+      localStorage.setItem('account', JSON.stringify(data))
+      context.setAccount(data)
+      console.log(data);
+
+      handleSignIn()
+    }
+
+
 
     // Elemento del Log In a renderizar
     const renderLogIn = () => {
@@ -37,7 +65,8 @@ function SignIn() {
           to='/'>
           <button
             className='bg-black disabled:bg-black/40 text-white w-full rounded-lg py-3 mt-4 mb-2'
-            disabled={!hasUserAnAccount}>
+            disabled={!hasUserAnAccount}
+            onClick={() => handleSignIn()}>
             Log in
           </button>
         </Link>
@@ -59,7 +88,62 @@ function SignIn() {
 
     //Elemento a renderizar si hay que crear user ingo
     const renderCreateUserInfo = () => {
+      return ( 
+        <form ref={form} className='flex flex-col gap-4 w-80'>
+          <div className='flex flex-col gap-1'>
+            <label htmlFor='name' className='font-light text-sm'>Your name:</label>
+            <input
+              type='text'
+              id='name'
+              name='name'
+              defaultValue={parsedAccount?.name}
+              placeholder='Your Name'
+              className='rounded-lg border border-black placeholder:font-light
+              placeholder:text-sm placeholder:text-black/60 focus:outline-none py-2 px-4'
+            >
 
+            </input>
+          </div>
+
+          <div className='flex flex-col gap-1'>
+            <label htmlFor='email' className='font-light text-sm'>Your e-mail</label>
+            <input
+              type='text'
+              id='email'
+              name='email'
+              defaultValue={parsedAccount?.email}
+              placeholder='Your Email'
+              className='rounded-lg border border-black placeholder:font-light
+              placeholder:text-sm placeholder:text-black/60 focus:outline-none py-2 px-4'
+            >
+
+            </input>
+          </div>
+
+          <div className='flex flex-col gap-1'>
+            <label htmlFor='password' className='font-light text-sm'> Your Password: </label>
+            <input
+              type='text'
+              id='password'
+              name='password'
+              defaultValue={parsedAccount?.password}
+              placeholder='*****'
+              className='rounded-lg border border-black placeholder:font-light
+              placeholder:text-sm placeholder:text-black/60 focus:outline-none py-2 px-4'
+            >
+            </input>
+          </div>
+
+          <Link>
+              <button
+                className='bg-black text-white w-full rounded-lg py-3'
+                onClick={() => createAnAccount()}
+                >
+                Create
+              </button>
+            </Link>
+        </form>
+      )
     }
 
     //Rendering dependiendo de estado: Log in - Create User Info
